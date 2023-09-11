@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Update="AboutAppForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="AccountingСontractsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="AddDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="AllUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DeleteDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EventsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ExitForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormNewReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormResetData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SignInForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="UpdateDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
