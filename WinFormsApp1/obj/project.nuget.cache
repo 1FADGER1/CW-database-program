@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UmUpaA8/51PY4Cy5+ZdF4n/3z4CmwAfPkGNFBFLBkfQ0O/bbwXLOsIrdubnCTLRXmf3HgChyu7zRjB66AP7cFg==",
+  "dgSpecHash": "UOMbjEQhs91QEnR61W9Asb6hO/ZgylPoDU9fr7cf/u+mu8VwB816dNn+I38VIosmeCKWWtA/1cH+1kF51OXI7w==",
   "success": true,
-  "projectFilePath": "D:\\разработка\\курсовая\\WinFormsApp1\\WinFormsApp1.csproj",
+  "projectFilePath": "D:\\разработка\\курсовая\\CW-database-program\\WinFormsApp1\\WinFormsApp1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\crepe\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\crepe\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
