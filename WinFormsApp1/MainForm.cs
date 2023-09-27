@@ -217,7 +217,7 @@ namespace WinFormsApp1
             }
             catch (Exception e)
             {
-                MessageBox.Show("Ошибка: "+e.Message+" Такой ключ уже существует");
+                MessageBox.Show("Ошибка: " + e.Message + " Такой ключ уже существует");
             }
         }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -266,6 +266,12 @@ namespace WinFormsApp1
         private void MainForm_Load(object sender, EventArgs e)
         {
             FormNewReport formNewReport = new FormNewReport(this);
+        }
+
+        private void buttonChoose_Click(object sender, EventArgs e)
+        {
+            ChooseForm chooseForm = new ChooseForm(this);
+            chooseForm.Show();
         }
     }
 }

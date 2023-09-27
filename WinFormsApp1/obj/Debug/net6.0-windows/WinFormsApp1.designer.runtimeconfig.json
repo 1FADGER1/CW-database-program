@@ -14,7 +14,7 @@
     "additionalProbingPaths": [
       "C:\\Users\\crepe\\.dotnet\\store\\|arch|\\|tfm|",
       "C:\\Users\\crepe\\.nuget\\packages",
-      "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      "D:\\Programing\\SDK\\NuGetPackages"
     ],
     "configProperties": {
       "System.Reflection.NullabilityInfoContext.IsSupported": true,

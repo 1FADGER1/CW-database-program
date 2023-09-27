@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Xml;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WinFormsApp1
 {
@@ -83,6 +84,73 @@ namespace WinFormsApp1
             DataTable table = new DataTable();
             adapter.Fill(table);
             dataGridView.DataSource = table;
+        }
+
+        public static void CreateDBGrid(string[] columnNames, string[] tableNames, SqlConnection connection, DataGridView dataGridView, string likeString)
+        {
+            string columns = string.Join(", ", columnNames);
+            string tables = "";
+            string where = "where";
+            foreach (string table in tableNames)
+            {
+                switch (table)
+                {
+                    case "Расписание мероприятий":
+                        tables += "[Schedule events] schedule,";
+                        break;
+                    case "Пользователи системы":
+                        tables += "[System User] users,";
+                        break;
+                    case "Учет договоров":
+                        if (tables.Contains("[Schedule events] schedule,"))
+                            where += " schedule.[Contract number] = contract.[Contract number] AND";
+                        tables += "[Accounting contracts] contract,";
+                        break;
+                    case "Учет посещения мероприятия":
+                        if (tables.Contains("[Schedule events] schedule,"))
+                            where += " schedule.Code_event = attendance.Code_Event AND";
+                        tables += "[Event attendance accounting] attendance,";
+                        break;
+                    case "Участники проводящие мероприятие":
+                        if (tables.Contains("[Schedule events] schedule,"))
+                            where += " schedule.Code_event = participant.Code_Event AND";
+                        tables += "[Participants hosting event] participant,";
+                        break;
+                    case "Спонсоры":
+                        if (tables.Contains("[Schedule events] schedule,"))
+                            where += " schedule.Code_event = sponsor.Code_Event AND";
+                        tables += "Sponsors sponsor,";
+                        break;
+                    case "Дополнительные услуги":
+                        if (tables.Contains("[Accounting contracts] contract,"))
+                            where += " service.[Contract number] = contract.[Contract number] AND";
+                        if(tables.Contains("[Schedule events] schedule,"))
+                            where += " service.[Contract number] = schedule.[Contract number] AND";
+                        tables += "[Additional services] service,";
+                        break;
+                    case "О мероприятие":
+                        if (tables.Contains("[Schedule events] schedule,"))
+                            where += " schedule.Code_event = about.Code_Event AND";
+                        tables += "[About event] about,";
+                        break;
+                    default:
+                        tables += "[Schedule events] schedule,";
+                        break;
+                }
+            }
+            where = new string(where.Reverse().SkipWhile(x => x != ' ').Reverse().ToArray());
+            tables = tables.TrimEnd(',');
+            string query;
+            if (tables != "[Schedule events] schedule,[System User] user")
+                query = $"SELECT DISTINCT {columns} FROM {tables} {where} {likeString}";
+            else
+                query = $"SELECT DISTINCT {columns} FROM {tables} {likeString}";
+            MessageBox.Show(query); //отлавливаем ошибки с запросом
+            SqlCommand command = new SqlCommand(query, connection);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable tableDB = new DataTable();
+            adapter.Fill(tableDB);
+            dataGridView.DataSource = tableDB;
         }
 
         //метод для добавления данных в таблицу

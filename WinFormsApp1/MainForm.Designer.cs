@@ -50,8 +50,8 @@
             dataGridView2 = new DataGridView();
             label3 = new Label();
             comboBox3 = new ComboBox();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             labelUserLogin = new Label();
+            buttonChoose = new Button();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -94,7 +94,7 @@
             // buttonAllUsers
             // 
             buttonAllUsers.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            buttonAllUsers.Location = new Point(470, 536);
+            buttonAllUsers.Location = new Point(337, 536);
             buttonAllUsers.Name = "buttonAllUsers";
             buttonAllUsers.Size = new Size(258, 33);
             buttonAllUsers.TabIndex = 4;
@@ -312,11 +312,23 @@
             labelUserLogin.Text = "User_login";
             labelUserLogin.Click += labelUserLogin_Click;
             // 
+            // buttonChoose
+            // 
+            buttonChoose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            buttonChoose.Location = new Point(611, 536);
+            buttonChoose.Name = "buttonChoose";
+            buttonChoose.Size = new Size(118, 33);
+            buttonChoose.TabIndex = 7;
+            buttonChoose.Text = "Выбрать";
+            buttonChoose.UseVisualStyleBackColor = true;
+            buttonChoose.Click += buttonChoose_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(984, 581);
+            Controls.Add(buttonChoose);
             Controls.Add(labelUserLogin);
             Controls.Add(tabControl1);
             Controls.Add(buttonAllUsers);
@@ -344,7 +356,6 @@
         private Label labelNameDB;
         private Button buttonAllUsers;
         private TabPage tabPage2;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         public Label labelUserLogin;
         private TabPage tabPage1;
         private ComboBox comboBox1;
@@ -363,5 +374,6 @@
         private Button button2;
         private Button button3;
         private Button button4;
+        private Button buttonChoose;
     }
 }
