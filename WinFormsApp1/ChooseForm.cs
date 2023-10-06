@@ -127,7 +127,7 @@ namespace WinFormsApp1
 
         private void buttonSaveAs_Click(object sender, EventArgs e)
         {
-            SaveAs save = new SaveAs(dataGridView1);
+            SaveAs save = new SaveAs(dataGridView1, textBoxText.Text);
         }
 
         /*в будущем можно добавить проверку на админа с доступом к пользователям системы

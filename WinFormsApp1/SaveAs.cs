@@ -9,7 +9,7 @@ namespace WinFormsApp1
 {
     internal class SaveAs
     {
-        public SaveAs(DataGridView dataGridView) 
+        public SaveAs(DataGridView dataGridView, string FindIs = "") 
         {
             var filePath = string.Empty;
             var sb = new StringBuilder();
@@ -32,20 +32,24 @@ namespace WinFormsApp1
                     //получаем расширение файла и исходя из него строим техт
                     if (Path.GetExtension(filePath).ToString() == ".csv")
                     {
-                        sb.AppendLine(string.Join(";", headers.Select(column => column.HeaderText).ToArray()));
+                        sb.AppendLine(string.Join(",", headers.Select(column => "\"" + column.HeaderText + "\"").ToArray()));
                         foreach (DataGridViewRow row in dataGridView.Rows)
                         {
                             var cells = row.Cells.Cast<DataGridViewCell>();
-                            sb.AppendLine(string.Join(";", cells.Select(cell => cell.Value).ToArray()));
+                            //var filteredCells = cells.Where(cell => !string.IsNullOrWhiteSpace(cell.Value.ToString()));
+                            if (cells.Any(cell => cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString())))
+                                sb.AppendLine(string.Join(",", cells.Select(cell => "\"" + cell.Value + "\"").ToArray()));
                         }
                     }
                     else
                     {
-                        sb.AppendLine(string.Join("/", headers.Select(column => "\"" + column.HeaderText + "\"").ToArray()));
+                        sb.AppendLine(FindIs);
+                        sb.AppendLine($"{dataGridView.RowCount - 1}");
                         foreach (DataGridViewRow row in dataGridView.Rows)
                         {
                             var cells = row.Cells.Cast<DataGridViewCell>();
-                            sb.Append(string.Join("/", cells.Select(cell => cell.Value).ToArray())).AppendLine("@");
+                            if (cells.Any(cell => cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString())))
+                                sb.Append(string.Join("\n", cells.Select(cell => cell.Value?.ToString()).Where(value => !string.IsNullOrWhiteSpace(value) && value != FindIs))).AppendLine("@");
                         }
                     }
                     //записываем нужные данные в файл
