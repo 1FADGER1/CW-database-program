@@ -1,6 +1,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration;
+using System.Timers;
 using System.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using System.Threading.Tasks;
@@ -13,12 +14,28 @@ namespace WinFormsApp1
     {
         private IConfiguration _configuration;//создаем поле типа IConfiguration для доступа к конфигурационому файлу .json
         public static bool admin;//флаг для определения вошел ли админа
-        
+        private System.Timers.Timer timer;
+
         public SignInForm()
         {
             InitializeComponent();
+            timer = new System.Timers.Timer();
+            // Создание и настройка таймера
+            timer = new System.Timers.Timer();
+            timer.Interval = 30000; // Интервал в миллисекундах (здесь 30 секунда)
+            timer.AutoReset = true; // Установка автоматического повторения
+            timer.Elapsed += Timer_Elapsed; // Обработчик события Elapsed
+            // Запуск таймера когда форма загружена
+            timer.Start();
+            // Вызов метода асинхронно один раз
+            Task.Run (() => SaveAs.SavingXML());
             //создаем переменную для работы с конфигурацией .json
             _configuration = (IConfiguration)ClassEditDB.Building();
+        }
+        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // Вызов метода асинхронно при каждом срабатывании таймера
+            await SaveAs.SavingXML();
         }
 
         private void labelResetPassword_Click(object sender, EventArgs e)

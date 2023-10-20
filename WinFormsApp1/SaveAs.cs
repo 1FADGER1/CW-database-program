@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Xml;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace WinFormsApp1
 {
@@ -58,6 +62,25 @@ namespace WinFormsApp1
                         writer.WriteLine(sb);
                     }
                 }
+            }
+        }
+
+        public static async Task SavingXML()
+        {
+            string connectionString = @"Data Source=localhost;Initial Catalog=AccEventsAndSeminars;Integrated Security=True";
+            string sql = "use AccEventsAndSeminars " +
+                 "select distinct s.[Event title], s.[Event date], " +
+                 "s.[Event sponsor], c.[Сost contract for us] " +
+                 "from [Schedule events] AS s, [Accounting contracts] AS c " +
+                 "where s.[Contract number] = c.[Contract number] and s.[Event sponsor] = 'ФГАИС \"Молодежь России\"'";
+            DataTable dataTable = new DataTable("EventData");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                SqlCommand command = new SqlCommand(sql, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+                dataTable.WriteXml("D:\\разработка\\WinFormsApp1\\XML\\Completed.xml");
             }
         }
     }

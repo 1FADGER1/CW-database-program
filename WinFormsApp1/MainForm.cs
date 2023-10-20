@@ -266,6 +266,7 @@ namespace WinFormsApp1
         private void MainForm_Load(object sender, EventArgs e)
         {
             FormNewReport formNewReport = new FormNewReport(this);
+            Task.Run(() => SaveAs.SavingXML());
         }
 
         private void buttonChoose_Click(object sender, EventArgs e)
