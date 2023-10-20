@@ -29,6 +29,7 @@ namespace WinFormsApp1
             timer.Start();
             // Вызов метода асинхронно один раз
             Task.Run (() => SaveAs.SavingXML());
+            Task.Run(() => SaveAs.SavingJson());
             //создаем переменную для работы с конфигурацией .json
             _configuration = (IConfiguration)ClassEditDB.Building();
         }
@@ -36,6 +37,7 @@ namespace WinFormsApp1
         {
             // Вызов метода асинхронно при каждом срабатывании таймера
             await SaveAs.SavingXML();
+            await SaveAs.SavingJson();
         }
 
         private void labelResetPassword_Click(object sender, EventArgs e)

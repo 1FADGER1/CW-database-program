@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Xml;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace WinFormsApp1
 {
     internal class SaveAs
     {
-        public SaveAs(DataGridView dataGridView, string FindIs = "") 
+        public SaveAs(DataGridView dataGridView, string FindIs = "")
         {
             var filePath = string.Empty;
             var sb = new StringBuilder();
@@ -80,7 +81,83 @@ namespace WinFormsApp1
                 SqlCommand command = new SqlCommand(sql, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 adapter.Fill(dataTable);
-                dataTable.WriteXml("D:\\разработка\\WinFormsApp1\\XML\\Completed.xml");
+                //Создаем новый DataTable с нужной структурой
+                DataTable newDataTable = new DataTable("ФГАИС_\"Молодежь_России\"");
+                newDataTable.Columns.Add("Event title", typeof(string));
+                newDataTable.Columns.Add("Event date", typeof(string));
+                newDataTable.Columns.Add("Сost contract for us", typeof(string));
+
+                // Переносим данные из исходного DataTable в новый DataTable
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    DataRow newRow = newDataTable.NewRow();
+                    newRow["Event title"] = row["Event title"];
+                    newRow["Event date"] = row["Event date"];
+                    newRow["Сost contract for us"] = row["Сost contract for us"];
+                    newDataTable.Rows.Add(newRow);
+                }
+                newDataTable.WriteXml("D:\\разработка\\WinFormsApp1\\XML\\Completed.xml");
+            }
+        }
+        public static async Task SavingJson()
+        {
+            string connectionString = @"Data Source=localhost;Initial Catalog=AccEventsAndSeminars;Integrated Security=True";
+            string sql = "use AccEventsAndSeminars " +
+                 "select distinct s.[Event title], s.[Event date], " +
+                 "s.[Event sponsor], c.[Сost contract for us] " +
+                 "from [Schedule events] AS s, [Accounting contracts] AS c " +
+                 "where s.[Contract number] = c.[Contract number] and s.[Event sponsor] = 'ФГАИС \"Молодежь России\"'";
+            DataTable dataTable = new DataTable("EventData");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                SqlCommand command = new SqlCommand(sql, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+                // сохранение данных
+                // Создаем словарь спонсора
+                Dictionary<string, List<Dictionary<string, object>>> sponsorDictionary = new Dictionary<string, List<Dictionary<string, object>>>();
+
+                foreach (DataRow dr in dataTable.Rows)
+                {
+                    string eventSponsor = dr["Event sponsor"].ToString();
+
+                    // Проверяем, есть ли уже запись для данного спонсора
+                    if (!sponsorDictionary.ContainsKey(eventSponsor))
+                    {
+                        sponsorDictionary[eventSponsor] = new List<Dictionary<string, object>>();
+                    }
+
+                    // Создаем словарь события
+                    Dictionary<string, object> eventDictionary = new Dictionary<string, object>();
+                    foreach (DataColumn col in dataTable.Columns)
+                    {
+                        if (col.ColumnName != "Event sponsor")
+                        {
+                            eventDictionary[col.ColumnName] = dr[col];
+                        }
+                    }
+
+                    // Добавляем словарь события в список для данного спонсора
+                    sponsorDictionary[eventSponsor].Add(eventDictionary);
+                }
+                // Сохраняем данные
+                using (FileStream fs = new FileStream("D:\\разработка\\WinFormsApp1\\JSON\\Completed.json", FileMode.OpenOrCreate))
+                {
+                    List<object> sponsorList = new List<object>();
+                    foreach (var kvp in sponsorDictionary)
+                    {
+                        Dictionary<string, object> sponsorEntry = new Dictionary<string, object>();
+                        sponsorEntry[kvp.Key] = kvp.Value;
+                        sponsorList.Add(sponsorEntry);
+                    }
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                    };
+                    await JsonSerializer.SerializeAsync(fs, sponsorList, options);
+                }
             }
         }
     }
