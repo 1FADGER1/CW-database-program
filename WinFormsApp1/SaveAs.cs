@@ -127,7 +127,6 @@ namespace WinFormsApp1
                     {
                         sponsorDictionary[eventSponsor] = new List<Dictionary<string, object>>();
                     }
-
                     // Создаем словарь события
                     Dictionary<string, object> eventDictionary = new Dictionary<string, object>();
                     foreach (DataColumn col in dataTable.Columns)
